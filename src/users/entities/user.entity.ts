@@ -1,30 +1,31 @@
 import { Entity, Column } from 'typeorm';
-// import { ApiProperty } from '@nestjs/swagger';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BaseEntity } from '../../common/entities/base.entity';
 
+@ObjectType()
 @Entity({ schema: 'security', name: 'users' })
 export class User extends BaseEntity {
-  //   @ApiProperty({ description: 'First name of the user' })
+  @Field()
   @Column()
   first_name: string;
 
-  //   @ApiProperty({ description: 'Last name of the user' })
+  @Field()
   @Column()
   last_name: string;
 
-  //   @ApiProperty({ description: 'Age of the user', required: false })
+  @Field(() => Int, { nullable: true })
   @Column({ nullable: true })
   age?: number;
 
-  //   @ApiProperty({ description: 'Email of the user' })
+  @Field()
   @Column({ unique: true })
   email: string;
 
-  //   @ApiProperty({ description: 'Username of the user' })
+  @Field()
   @Column({ unique: true })
   username: string;
 
-  //   @ApiProperty({ description: 'Password of the user' })
+  @Field()
   @Column({ select: false })
   password: string;
 }

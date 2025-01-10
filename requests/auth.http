@@ -32,3 +32,22 @@ Content-Type: application/json
   "username": "john",
   "password" : "changeme"
 }
+
+
+###
+
+POST http://localhost:3000/graphql
+Content-Type: application/json
+
+{
+  "query": "query { users { id first_name last_name age email username } }"
+}
+
+###
+
+POST http://localhost:3000/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation { createUser(createUserDto: { first_name: \"Jane\", last_name: \"Doe\", age: 25, email: \"jane.doe@example.com\", username: \"janedoe\", password: \"securepassword\" }) { id first_name last_name age email username } }"
+}

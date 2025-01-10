@@ -5,7 +5,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
-// import { ApiProperty } from '@nestjs/swagger';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 /**
  * Abstract base entity class that includes common properties for all entities.
@@ -16,16 +16,17 @@ import {
  * @property {Date} updatedAt - The update date of the row.
  * @property {Date} deletedAt - The deletion date of the row.
  */
+@ObjectType()
 export abstract class BaseEntity {
-  //   @ApiProperty({ description: 'The primary key: id.' })
+  @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number;
 
-  //   @ApiProperty({ description: 'A boolean to identify if a row is active.' })
+  @Field()
   @Column('boolean', { default: true })
   is_active: boolean;
 
-  //   @ApiProperty({ description: 'The creation date of the row.' })
+  @Field()
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
@@ -33,7 +34,7 @@ export abstract class BaseEntity {
   })
   created_at: Date;
 
-  //   @ApiProperty({ description: 'The update date of the row.' })
+  @Field()
   @UpdateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
@@ -42,10 +43,7 @@ export abstract class BaseEntity {
   })
   updated_at: Date;
 
-  //   @ApiProperty({
-  //     description: 'The deletion date of the row.',
-  //     name: 'deleted_at',
-  //   })
+  @Field({ nullable: true })
   @DeleteDateColumn({ type: 'timestamp', default: null })
   deleted_at: Date;
 }
