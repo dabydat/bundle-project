@@ -8,22 +8,23 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './guards/auth.guard';
-import { AuthInput } from './auth.types';
+import { PassportLocalGuard } from './guards/passport-local.guard';
+import { PassportJwtAuthGuard } from './guards/passport-jwt-auth.guard';
 
-@Controller('auth')
-export class AuthController {
+@Controller('auth-v2')
+export class PassportAuthController {
   constructor(private authService: AuthService) {}
 
   @HttpCode(200)
   @Post('login')
-  login(@Body() input: AuthInput) {
-    return this.authService.authenticate(input);
+  @UseGuards(PassportLocalGuard)
+  login(@Request() request) {
+    return this.authService.signIn(request.user);
   }
 
   @HttpCode(200)
-  @UseGuards(AuthGuard)
   @Get('me')
+  @UseGuards(PassportJwtAuthGuard)
   getUserInfo(@Request() request) {
     return {
       message: 'You are authenticated as user',

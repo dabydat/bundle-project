@@ -1,15 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-
-type AuthInput = { username: string; password: string };
-type SignInData = { userId: number; username: string };
-type AuthResult = {
-  accessToken: string;
-  refreshToken: string;
-  userId: number;
-  username: string;
-};
+import * as bcrypt from 'bcrypt';
+import { AuthInput, AuthResult, SignInData } from './auth.types';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +19,8 @@ export class AuthService {
 
   async validateUser(input: AuthInput): Promise<SignInData | null> {
     const user = await this.usersService.findUserByName(input.username);
-    if (user && user.password === input.password) {
+    const verifyPassword = await bcrypt.compare(input.password, user.password);
+    if (user && verifyPassword) {
       return {
         userId: user.id,
         username: user.username,
@@ -54,13 +48,12 @@ export class AuthService {
     try {
       const payload = this.jwtService.verify(token);
       const user = await this.usersService.findUserById(payload.sub);
-
-      if (!user) {
-        throw new UnauthorizedException();
-      }
-
+      if (!user) throw new UnauthorizedException();
       return this.signIn({ userId: user.id, username: user.username });
-    } catch {
+    } catch (error) {
+      if (error instanceof TokenExpiredError) {
+        throw new UnauthorizedException('Refresh token has expired');
+      }
       throw new UnauthorizedException();
     }
   }
