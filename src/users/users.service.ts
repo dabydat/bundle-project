@@ -1,33 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-
-// export type User = {
-//   id: number;
-//   username: string;
-//   password: string;
-// };
-
-// const users: User[] = [
-//   {
-//     id: 1,
-//     username: 'jon',
-//     password: 'changeme',
-//   },
-//   {
-//     id: 2,
-//     username: 'chris',
-//     password: 'changeme',
-//   },
-//   {
-//     id: 3,
-//     username: 'faraz',
-//     password: 'changeme',
-//   },
-// ];
+import {
+  FindUserByIdDto,
+  FindUserByUsernameDto,
+} from './dto/validations-user.dto';
+import { validateDto } from 'src/common/utils/validateDto.utils';
+import { queryOne } from 'src/common/services/db.service';
 
 @Injectable()
 export class UsersService {
@@ -46,16 +28,14 @@ export class UsersService {
     return newUser;
   }
 
-  async findUserByName(username: string): Promise<User | undefined> {
-    const user = await this.usersRepository.findOne({ where: { username } });
-    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    return user;
+  async findUserByUsername(username: string): Promise<User | undefined> {
+    await validateDto(FindUserByUsernameDto, { username });
+    return queryOne(this.usersRepository, { where: { username } });
   }
 
-  async findUserById(userId: number): Promise<User | undefined | void> {
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
-    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    return user;
+  async findUserById(userId: number): Promise<User | undefined> {
+    await validateDto(FindUserByIdDto, { userId });
+    return queryOne(this.usersRepository, { where: { id: userId } });
   }
 
   async findAll(): Promise<User[]> {

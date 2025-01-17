@@ -23,12 +23,3 @@ export const createDataSourceOptions = (env: Env): DataSourceOptions => ({
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
 });
-
-// /**
-//  * Creates a new DataSource instance with the provided options.
-//  *
-//  * @param options - The configuration options for the DataSource.
-//  * @returns A new DataSource instance.
-//  */
-// export const createDataSource = (options: DataSourceOptions): DataSource =>
-//   new DataSource(options);

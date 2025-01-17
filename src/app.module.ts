@@ -5,6 +5,7 @@ import { envValidationSchema } from './common/config/envs/env.config';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './common/config/database/database.module';
 import { GraphqlModule } from './common/config/modules/graphql.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { GraphqlModule } from './common/config/modules/graphql.module';
     UsersModule,
     AuthModule,
     GraphqlModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [],

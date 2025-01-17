@@ -18,12 +18,12 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/auth/me
-authorization: Bearer <token>
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJzdWIiOjUsImlhdCI6MTczNzA2ODU3MCwiZXhwIjoxNzM3MTU0OTcwfQ.bnhqYdoYMJKqU3EMbULQDRxCXhWreWtPljKOxRgVeRw
 
 ###
 
 GET http://localhost:3000/auth-v2/me
-authorization: Bearer <token>
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJzdWIiOjUsImlhdCI6MTczNzA2ODU3MCwiZXhwIjoxNzM3MTU0OTcwfQ.bnhqYdoYMJKqU3EMbULQDRxCXhWreWtPljKOxRgVeRw
 
 ###
 
